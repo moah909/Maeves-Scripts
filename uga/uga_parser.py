@@ -19,7 +19,7 @@ soup = BeautifulSoup(page, 'html.parser')
 # Get the smallest common group to make finding things easier
 links = soup.find_all(href=re.compile("people"))
 # For every link we get that starts with people, we want to go to that page
-
+i = 1;
 for link in links:
     # Make a proper url
     suburl = re.sub("/directory/[^/]*$",link['href'],quote_page)
@@ -47,6 +47,8 @@ for link in links:
         print("Email not found for {}".format(names[-1]))
         emails.append("")
 
+    print("\r{}/{}".format(i,len(links)), end = "", flush=True)
+    i += 1
 
 with open('output.csv', 'a+', newline='') as csvfile:
     writer = csv.writer(csvfile)
