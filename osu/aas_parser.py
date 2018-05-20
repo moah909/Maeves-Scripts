@@ -56,4 +56,7 @@ for person in faculty:
 with open('aas_output.csv', 'a+', newline='') as csvfile:
     writer = csv.writer(csvfile)
     for x in range(0,len(names)):
-        writer.writerow([names[x],emails[x],positions[x],dept])
+        try:
+            writer.writerow([names[x],emails[x],positions[x],dept])
+        except:
+            print("There was an issue writing data for {}".format(names[x]))
