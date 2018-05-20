@@ -30,6 +30,8 @@ except:
 # Get all entries in the table
 faculty = soup.find(class_="views-table").find_all("tr")
 
+i = 1;
+
 for person in faculty:
     name = person.find("a",href=re.compile("/people")).text
     name = re.sub(" +"," ",name).strip()
@@ -47,6 +49,9 @@ for person in faculty:
     except:
         print("\rPosition not found for {}".format(names[-1]))
         positions.append("")
+
+    print("\r{}/{}".format(i,len(faculty)), end = "")
+    i += 1
 
 with open('aas_output.csv', 'a+', newline='') as csvfile:
     writer = csv.writer(csvfile)
