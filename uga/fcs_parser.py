@@ -5,10 +5,10 @@ from bs4 import BeautifulSoup
 import csv
 import html
 
-pages=[]
-names=[]
-positions = []
-emails = []
+pages      = []
+names      = []
+positions  = []
+emails     = []
 directory_page = input('URL: ')
 
 # query the website and return the html to the variable 'page'
