@@ -53,6 +53,8 @@ for person in faculty:
     print("\r{}/{}".format(i,len(faculty)), end = "")
     i += 1
 
+print()
+
 with open('aas_output.csv', 'a+', newline='') as csvfile:
     writer = csv.writer(csvfile)
     for x in range(0,len(names)):
