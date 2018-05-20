@@ -17,12 +17,12 @@ page = urlopen(quote_page)
 soup = BeautifulSoup(page, 'html.parser')
 
 # Get the smallest common group to make finding things easier
-links = soup.find_all(href=re.compile("people"))
+faculty = soup.find_all(class_="views-row")
 # For every link we get that starts with people, we want to go to that page
 i = 1;
-for link in links:
+for person in faculty:
     # Make a proper url
-    suburl = re.sub("/directory/[^/]*$",link['href'],quote_page)
+    suburl = re.sub("/directory/[^/]*$",person.find("a")['href'],quote_page)
 
     # Make a new soup for it
     subsoup = BeautifulSoup(urlopen(suburl),"html.parser")
@@ -42,12 +42,12 @@ for link in links:
         print("Position not found for {}".format(names[-1]))
         positions.append("")
     try:
-        emails.append(subsoup.find("a",href=re.compile("mailto")).string)
+        emails.append(subsoup.find(class_="field_email").string)
     except:
         print("Email not found for {}".format(names[-1]))
         emails.append("")
 
-    print("\r{}/{}".format(i,len(links)), end = "", flush=True)
+    print("\r{}/{}".format(i,len(faculty)), end = "", flush=True)
     i += 1
 
 with open('output.csv', 'a+', newline='') as csvfile:
