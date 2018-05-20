@@ -24,9 +24,9 @@ soup = BeautifulSoup(page, 'html.parser')
 dept = "Lamar Dodd School of Art"
 
 
-name_boxes.extend(soup.find_all("h2",class_=""))
+name_boxes.extend(soup.find_all(class_="views-field-field-last-name"))
 try:
-     position_boxes.extend(soup.find_all(class_= "views-field-field-job-title"))
+     position_boxes.extend(soup.find_all(class_= re.compile("views-field-field-job-title")))
 except Exception:
      print("Manually check positions, there's a mismatch")
      positions.append("")
@@ -36,7 +36,7 @@ email_boxes.extend(soup.find_all(class_="views-field-field-email"))
 #sections.append(sections[x].find("a").attrs['name'])
 
 for x in range(0,len(name_boxes)):
-    names.append(name_boxes[x].string)
+    names.append(name_boxes[x].text.strip())
     try:
      positions.append(position_boxes[x].findChild().string)
     except Exception:
