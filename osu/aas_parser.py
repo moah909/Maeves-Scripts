@@ -22,7 +22,10 @@ page = urlopen(directory_page)
 # parse the html using beautiful soup and store in variable 'soup'
 soup = BeautifulSoup(page, 'html.parser')
 
-dept = soup.find(id="logo")['alt']
+try:
+    dept = soup.find(id="logo")['alt']
+except:
+    dept = input("Department: ")
 
 # Get all entries in the table
 faculty = soup.find(class_="views-table").find_all("tr")
