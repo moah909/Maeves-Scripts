@@ -34,7 +34,7 @@ for link in links:
 
     try:
         position = subsoup.find("p",class_="").text
-        position = position.split("\r")
+        position = position.split("\r")[0].strip()
         positions.append(position)
     except:
         print("\rPosition not found for {}".format(names[-1]))
