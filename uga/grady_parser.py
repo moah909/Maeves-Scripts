@@ -62,5 +62,5 @@ with open('grady_output.csv', 'a+', newline='') as csvfile:
             print("There was an issue writing data for {}".format(names[x]))
 
 print("Type exit to exit")
-while input() is not 'exit':
+while input() != 'exit':
     pass
