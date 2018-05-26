@@ -1,2 +1,3 @@
 ms/
 *.csv
+__pycache__/
