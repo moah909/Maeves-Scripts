@@ -4,9 +4,11 @@ import bs4
 PhD_regex  = re.compile(",? Ph\.?D\.?")
 mailto_pat = re.compile("mailto")
 
-def cleanName(name):
+def cleanName(name, flip=False):
     name = re.sub(PhD_regex,"",name)
     name = re.sub(" +"," ",name)
+    if flip:
+        name = (" ".join(name.split(", ")[1::-1]))
     return name.strip()
 
 def cleanPosition(position):
