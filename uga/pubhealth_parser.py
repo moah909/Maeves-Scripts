@@ -33,7 +33,7 @@ faculty = soup.find_all(class_="bio-box")
 dept = re.search("#(.+)",quote_page).group(1)
 
 for person in faculty:
-    if dept not in person.parent['class']):
+    if dept not in person.parent['class']:
         continue # If its supposed to be hidden, skip it
 
     names.append(person.find("h5").text.strip().split(",")[0])
@@ -43,7 +43,7 @@ for person in faculty:
         print("\rEmail not found for {}".format(names[-1]))
         emails.append("")
     try:
-        positions.append(person.find(class_="title").text.strip())
+        positions.append(person.find(class_="title").text.strip().split(" of ")[0])
     except:
         print("\rPosition not found for {}".format(names[-1]))
         positions.append("")

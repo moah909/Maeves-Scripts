@@ -5,11 +5,16 @@ from bs4 import BeautifulSoup
 import csv
 import html
 
-pages     = []
-names     = []
+pages=[]
+names=[]
 positions = []
-emails    = []
+emails = []
 directory_page = input('URL: ')
+
+def getEmailFromSubpage(link):
+    suburl = re.sub("/departments/.*$",link['href'],directory_page)
+    subsoup = BeautifulSoup(urlopen(suburl),"html.parser")
+    return subsoup.find(class_="email").text
 
 # query the website and return the html to the variable 'page'
 page = urlopen(directory_page)
@@ -17,22 +22,26 @@ page = urlopen(directory_page)
 # parse the html using beautiful soup and store in variable 'soup'
 soup = BeautifulSoup(page, 'html.parser')
 
-# Get all entries in the table
-faculty = soup.find_all(class_="directory-member")
+dept = input("Department: ")
 
-dept = soup.find(class_="section-title").text
+# Get all entries in the table
+faculty = soup.find_all(class_="faculty-preview")
 
 i = 1;
+
 for person in faculty:
-    name = person.find(class_="as-heading-small").text.strip()
+    name = person.find(class_="faculty-name").text.strip()
+    name = re.sub(" +"," ",name).strip()
     names.append(name)
     try:
-        emails.append(person.find(href=re.compile("mailto")).text)
+        emails.append(getEmailFromSubpage(person.find("a")))
     except:
         print("\rEmail not found for {}".format(names[-1]))
         emails.append("")
     try:
-        position = person.find("p").text.strip()
+        position = person.find(class_="faculty-title").text.strip()
+        position = position.split(" of ")[0]
+        position = position.split(" in ")[0]
         positions.append(position)
     except:
         print("\rPosition not found for {}".format(names[-1]))
@@ -43,7 +52,7 @@ for person in faculty:
 
 print()
 
-with open('ed_output.csv', 'a+', newline='') as csvfile:
+with open('paul_output.csv', 'a+', newline='') as csvfile:
     writer = csv.writer(csvfile)
     for x in range(0,len(names)):
         try:
