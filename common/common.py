@@ -11,8 +11,11 @@ def cleanName(name, flip=False):
         name = (" ".join(name.split(", ")[1::-1]))
     return name.strip()
 
-def cleanPosition(position):
+def cleanPosition(position, delim=None, index=0):
+    if delim is not None:
+        position = position.split(delim)[index]
     position = position.split(" of ")[0] # Only get the chunk before of eg Professor of Anthropology
+    position = re.sub("\\n"," ",position)
     position = re.sub(" +"," ",position)
     return position.strip()
 
