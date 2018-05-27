@@ -1,3 +1,3 @@
 ms/
-*.csv
+*.csv*
 __pycache__/
