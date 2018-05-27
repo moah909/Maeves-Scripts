@@ -15,6 +15,7 @@ emails    = []
 depts     = []
 
 EMAIL_FROM_HREF = False
+FLIP_NAME       = False
 
 container_tag   = "tag" # Can be None to not sort by tag
 container_attrs = { "class_" : "value"}
@@ -58,12 +59,12 @@ soup = BeautifulSoup(page, 'html.parser')
 
 #dept = soup.find(class_="organization-unit").text
 
-faculty = soup.find(container_tag,**container_attrs).find_all(faculty_tag,**faculty_attrs
-)
+faculty = soup.find(container_tag,**container_attrs).find_all(faculty_tag,**faculty_attrs)
+
 for person in faculty:
 
-    name = person.find(name_tag,**name_attrs)
-    name = cleanName(name)
+    name = person.find(name_tag,**name_attrs).text
+    name = cleanName(name, flip=FLIP_NAME)
     names.append(name)
 
     try:
