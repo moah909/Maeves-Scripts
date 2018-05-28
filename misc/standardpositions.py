@@ -25,7 +25,8 @@ with open(sys.argv[1]) as datafile, open(sys.argv[2]) as mappingfile, open(sys.a
             positions.add(row[2])
             continue
 
-        row[2] = mapping[row[2]]
+        if mapping[row[2]] != "=":
+            row[2] = mapping[row[2]]
         writer.writerow(row)
 
     # for x in positions:
