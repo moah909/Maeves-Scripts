@@ -29,11 +29,14 @@ def readDept(department,dept_idx):
         soup = BeautifulSoup(page, 'html.parser')
 
         if last_page == -1:
-            nav_bar = soup.find(class_="wd-Pagination").find_all("a")
-            if nav_bar[-1].text == "Last":
-                last_page = int(nav_bar[-1]['href'].split("=")[-1])
-            else:
-                last_page = int(nav_bar[-2]['href'].split("=")[-1])
+            try:
+                nav_bar = soup.find(class_="wd-Pagination").find_all("a")
+                if nav_bar[-1].text == "Last":
+                    last_page = int(nav_bar[-1]['href'].split("=")[-1])
+                else:
+                    last_page = int(nav_bar[-2]['href'].split("=")[-1])
+            except:
+                return []
 
         #dept = soup.find(class_="organization-unit").text
         faculty = soup.find(container_tag,**container_attrs).find_all(faculty_tag,**faculty_attrs)
