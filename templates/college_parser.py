@@ -69,7 +69,7 @@ for person in faculty:
 
     try:
         if(EMAIL_FROM_HREF):
-            emails.append(person.find(email_tag,**email_attrs)['href'][7:-1])
+            emails.append(person.find(email_tag,**email_attrs)['href'][7:])
         else:
             emails.append(person.find(email_tag,**email_attrs).text.strip())
     except:
