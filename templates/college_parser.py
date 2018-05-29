@@ -76,14 +76,14 @@ for person in faculty:
         print("\rEmail not found for {}".format(name))
         emails.append("")
     try:
-        position = person.find(position_tag,**position_attrs)
+        position = person.find(position_tag,**position_attrs).text
         position = cleanPosition(position)
         positions.append(position)
     except:
         print("\rPosition not found for {}".format(name))
         positions.append("")
     try:
-        dept = person.find(dept_tag,**dept_attrs)
+        dept = person.find(dept_tag,**dept_attrs).text
         dept = cleanDepartment(dept)
         depts.append(dept)
     except:
