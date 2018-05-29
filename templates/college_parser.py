@@ -73,21 +73,21 @@ for person in faculty:
         else:
             emails.append(person.find(email_tag,**email_attrs).text.strip())
     except:
-        print("\rEmail not found for {}".format(names[-1]))
+        print("\rEmail not found for {}".format(name))
         emails.append("")
     try:
         position = person.find(position_tag,**position_attrs)
         position = cleanPosition(position)
         positions.append(position)
     except:
-        print("\rPosition not found for {}".format(names[-1]))
+        print("\rPosition not found for {}".format(name))
         positions.append("")
     try:
         dept = person.find(dept_tag,**dept_attrs)
         dept = cleanDepartment(dept)
         depts.append(dept)
     except:
-        print("\rDepartment not found for {}".format(names[-1]))
+        print("\rDepartment not found for {}".format(name))
         depts.append("")
 
 with open(output_file, 'a+', newline='') as csvfile:
