@@ -319,16 +319,34 @@ def readPage(query):
     retval = []
     directory_page = ("https://myaccount.umn.edu/lookup?SET_INSTITUTION=&campus=t&role=sta&type=name&CN={}".format(query))
 
-    supersoup  = BeautifulSoup(urlopen(directory_page),"html.parser")
+    for attempt in range(0,5):
+        try:
+            supersoup  = BeautifulSoup(urlopen(directory_page),"html.parser")
+        except:
+            print("{} failed to open {}/5, retrying...".format(query,attempt,))
+            pass
+        else:
+            break
+    else:
+        raise Exception("Failed 5 times")
 
     links = supersoup(href=re.compile("/lookup"))
 
     for idx, link in enumerate(links):
 
-        page = urlopen("https://myaccount.umn.edu"+link['href'])
+        for attempt in range(0,5):
+            try:
+                page = urlopen("https://myaccount.umn.edu"+link['href'])
 
-        # parse the html using beautiful soup and store in variable 'soup'
-        soup = BeautifulSoup(page, 'html.parser')
+                # parse the html using beautiful soup and store in variable 'soup'
+                soup = BeautifulSoup(page, 'html.parser')
+            except:
+                print("{} failed to open {}/5, retrying...".format(query,attempt,))
+                pass
+            else:
+                break
+        else:
+            raise Exception("Failed 5 times")
 
         #dept = soup.find(class_="organization-unit").text
         name = soup.find("h2").text
