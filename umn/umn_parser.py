@@ -401,10 +401,10 @@ START_INDEX = 0
 
 queries = [ "".join(tup) for tup in itertools.product(ALPHABET,repeat=2) ]
 
-for i in range(0,26):
+for i in range(23,26):
     try:
         with Pool() as pool:
-            result = pool.map(readPage, queries[i:i+CHUNK_SIZE])
+            result = pool.map(readPage, queries[i*CHUNK_SIZE:(i+1)*CHUNK_SIZE])
 
             with open(ALPHABET[i] + "." + output_file, 'a+', newline='') as csvfile:
                 writer = csv.writer(csvfile)
