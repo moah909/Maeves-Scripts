@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 import csv
 import itertools
 
-BAD_POSITIONS = {"Admin","admin","Worker","Researcher","RA","Spec","Temporary","Doctoral","Suppmental","Cook","Practical","Attendant"}
+BAD_POSITIONS = {"Admin","admin","Worker","Researcher","RA","Spec","Temporary","Doctoral","Suppmental","Cook","Practical","Attendant","Intern","Developer"}
 
 def processEmail(email):
     parts = re.findall("\'([\w\.]*)\'",email)
