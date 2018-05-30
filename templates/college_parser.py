@@ -17,22 +17,22 @@ depts     = []
 EMAIL_FROM_HREF = False
 FLIP_NAME       = False
 
-container_tag   = "tag" # Can be None to not sort by tag
+container_tag   = None # Can be None to not sort by tag
 container_attrs = { "class_" : "value"}
 
-faculty_tag     = "tag" # Can be None to not sort by tag
+faculty_tag     = None # Can be None to not sort by tag
 faculty_attrs   = { "class_" : "value"}
 
-name_tag        = "tag" # Can be None to not sort by tag
+name_tag        = None # Can be None to not sort by tag
 name_attrs      = { "class_" : "value"}
 
-email_tag       = "tag" # Can be None to not sort by tag
+email_tag       = None # Can be None to not sort by tag
 email_attrs     = { "class_" : "value"}
 
-position_tag    = "tag" # Can be None to not sort by tag
+position_tag    = None # Can be None to not sort by tag
 position_attrs  = { "class_" : "value"}\
 
-dept_tag        = "tag" # Can be None to not sort by tag
+dept_tag        = None # Can be None to not sort by tag
 dept_attrs      = { "class_" : "value"}
 
 output_file = "outputfile.csv"
