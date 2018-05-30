@@ -46,17 +46,20 @@ def readPage(query):
                 continue
         except:
             print("\rPosition not found for {}".format(name))
+            continue
             position = ""
         try:
             dept = blurb[2]
             dept = cleanDepartment(dept)
         except:
             print("\rDepartment not found for {}".format(name))
+            continue
             dept = ""
         try:
             email = soup.find(href=mailto_pat).text
         except:
             print("\rEmail not found for {}".format(name))
+            continue
             email = ""
 
         print("\r{}/{}".format(idx,len(links)), flush=True, end="")
@@ -105,7 +108,7 @@ queries = [ "".join(tup) for tup in itertools.product(ALPHABET,repeat=2) ]
 for i in range(0,26):
     try:
         with Pool() as pool:
-            result = pool.map(readPage, queries[START_INDEX*i:START_INDEX*i+CHUNK_SIZE])
+            result = pool.map(readPage, queries[i:i+CHUNK_SIZE])
 
             with open(ALPHABET[i] + "." + output_file, 'a+', newline='') as csvfile:
                 writer = csv.writer(csvfile)
