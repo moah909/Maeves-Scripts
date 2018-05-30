@@ -3,9 +3,12 @@ import sys
 
 mapping = {}
 
-if (len(sys.argv) != 4) or ("-h" in sys.argv) or ("--help" in sys.argv):
+if len(sys.argv) != 1) or (len(sys.argv) != 4) or ("-h" in sys.argv) or ("--help" in sys.argv):
     print("Usage: {} <input file> <position mappings> <output file>\nReplaces positions in <input file> with mappings from <positions mappings> and outputs them in <output file>".format(sys.argv[0]))
     exit()
+
+if len(sys.argv) == 1):
+    sys.argv = [0,input("Input File: "),input("Position Mapping: "),input("Output File: ")]
 
 positions = set()
 
