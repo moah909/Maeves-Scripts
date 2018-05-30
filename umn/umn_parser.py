@@ -105,9 +105,9 @@ queries = [ "".join(tup) for tup in itertools.product(ALPHABET,repeat=2) ]
 for i in range(0,26):
     try:
         with Pool() as pool:
-            result = pool.map(readPage, queries[START_INDEX*i::CHUNK_SIZE])
+            result = pool.map(readPage, queries[START_INDEX*i:START_INDEX*i+CHUNK_SIZE])
 
-            with open(output_file+str(i), 'a+', newline='') as csvfile:
+            with open(ALPHABET[i] + "." + output_file, 'a+', newline='') as csvfile:
                 writer = csv.writer(csvfile)
                 for process in result:
                     for row in process:
