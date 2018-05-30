@@ -1,4 +1,5 @@
 # import libraries
+import time
 import re
 import sys
 from multiprocessing import Pool, Queue
@@ -324,6 +325,7 @@ def readPage(query):
             supersoup  = BeautifulSoup(urlopen(directory_page),"html.parser")
         except:
             print("{} failed to open {}/5, retrying...".format(query,attempt,))
+            time.sleep(attempt)
             pass
         else:
             break
@@ -342,6 +344,7 @@ def readPage(query):
                 soup = BeautifulSoup(page, 'html.parser')
             except:
                 print("{} failed to open {}/5, retrying...".format(query,attempt,))
+                time.sleep(attempt)
                 pass
             else:
                 break
