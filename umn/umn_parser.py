@@ -103,11 +103,15 @@ START_INDEX = 0
 queries = [ "".join(tup) for tup in itertools.product(ALPHABET,repeat=2) ]
 
 for i in range(0,26):
-    with Pool() as pool:
-        result = pool.map(readPage, queries[START_INDEX*i::CHUNK_SIZE])
+    try:
+        with Pool() as pool:
+            result = pool.map(readPage, queries[START_INDEX*i::CHUNK_SIZE])
 
-        with open(output_file+str(i), 'a+', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            for process in result:
-                for row in process:
-                    writer.writerow(row)
+            with open(output_file+str(i), 'a+', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                for process in result:
+                    for row in process:
+                        writer.writerow(row)
+    except Exception as e:
+        print(e)
+        print("Error was caught on iteration {}/{}".format(i,25))
