@@ -15,7 +15,9 @@ import itertools
 def getInfoFromSubpage(link):
     for attempt in range(0,5):
         try:
-            soup = BeautifulSoup(requests.get(link, proxies = {"http":proxies[randrange(100)]}, timeout=30).text,"html.parser")
+            response = requests.get(link, proxies = {"http":proxies[randrange(100)]}, timeout= 30)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.text,"html.parser")
             email    = soup.find(href=re.compile("mailto")).text.strip()
             position = soup.find("dd").text.strip()
             return (email,position)
@@ -73,7 +75,6 @@ def readPage(query):
             email, position = getInfoFromSubpage("http" + info[0].find("a")["href"][5:])
         except:
             print("\rPosition or email not found for {}".format(name))
-            continue
             position = ""
             email    = ""
         try:
