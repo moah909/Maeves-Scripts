@@ -90,6 +90,7 @@ def readPage(query):
         last_name = faculty[-1].td.text.strip().split(" ")[-1]
         if last_name not in past_last_names and query.lower() in last_name.lower():
             past_last_names.append(last_name)
+            if
             if len(query) + 1 < len(last_name):
                 new_query = last_name[0:len(query)+1]
             else:
@@ -99,7 +100,7 @@ def readPage(query):
                 if new_query not in past_queries:
                     readPage(new_query)
 
-                if new_query[-1] == "z":
+                if new_query[-1] not in ALPHABET[:-1]:
                     break
                 new_query = new_query[:-1] + ALPHABET[ord(new_query[-1])-ord("a")+1]
 
