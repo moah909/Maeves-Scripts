@@ -11,7 +11,18 @@ import csv
 import itertools
 
 def getInfoFromSubpage(link):
-    soup     = BeautifulSoup(requests.get(link).text,"html.parser")
+    for attempt in range(0,5):
+        time.sleep(5)
+        try:
+            soup     = BeautifulSoup(requests.get(link).text,"html.parser")
+        except:
+            print("{} failed to open {}/5, retrying...".format(query,attempt,))
+            time.sleep(attempt)
+            pass
+        else:
+            break
+    else:
+        raise Exception("Failed 5 times")
     email    = soup.find(href=re.compile("mailto")).text.strip()
     position = soup.find("dd").text.strip()
     return (email,position)
@@ -25,6 +36,7 @@ def readPage(query):
              "p_name_last":query }
 
     for attempt in range(0,5):
+        time.sleep(5)
         try:
             response = requests.post(directory_page,data=data)
             response.raise_for_status()
@@ -109,14 +121,16 @@ queries = [ "".join(tup) for tup in itertools.product(ALPHABET,repeat=2) ]
 
 for i in range(0,26):
     try:
-        with Pool() as pool:
-            result = pool.map(readPage, queries[i*CHUNK_SIZE:(i+1)*CHUNK_SIZE])
+        result = []
+        # with Pool() as pool:
+        for j in range(0,26):
+            result.append(readPage(queries[i*26+j]))
 
-            with open(ALPHABET[i] + "." + output_file, 'a+', newline='') as csvfile:
-                writer = csv.writer(csvfile)
-                for process in result:
-                    for row in process:
-                        writer.writerow(row)
+        with open(ALPHABET[i] + "." + output_file, 'a+', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            for process in result:
+                for row in process:
+                    writer.writerow(row)
     except Exception as e:
         print(e)
         print("Error was caught on iteration {}/{}".format(i,25))
