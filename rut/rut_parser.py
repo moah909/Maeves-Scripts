@@ -84,18 +84,20 @@ def readPage(query):
     if soup.find(text=re.compile("50 matches")) != None:
         print()
         last_name = faculty[-1].td.text.strip().split(" ")[-1]
-        if len(query) + 1 < len(last_name):
-            new_query = last_name[0:len(query)+1]
-        else:
-            new_query = last_name
-        while True:
+        if last_name not in past_last_names:
+            past_last_names.append(last_name)
+            if len(query) + 1 < len(last_name):
+                new_query = last_name[0:len(query)+1]
+            else:
+                new_query = last_name
+            while True:
 
-            if new_query not in past_queries:
-                readPage(new_query)
+                if new_query not in past_queries:
+                    readPage(new_query)
 
-            if new_query[-1] == "z":
-                break
-            new_query = new_query[:-1] + ALPHABET[ord(new_query[-1])-ord("a")+1]
+                if new_query[-1] == "z":
+                    break
+                new_query = new_query[:-1] + ALPHABET[ord(new_query[-1])-ord("a")+1]
 
 
     print("\r{}/{} {}".format(len(faculty),len(faculty),query), flush=True)
@@ -138,6 +140,7 @@ queries = [ "".join(tup) for tup in itertools.product(ALPHABET,repeat=2) ]
 proxies = []
 
 past_queries = []
+past_last_names = []
 
 req = Request( "https://sslproxies.org/",
    data=None,
