@@ -65,6 +65,10 @@ def readPage(query):
         #dept = soup.find(class_="organization-unit").text
         name = info[0].text.strip()
 
+        if name in past_names:
+            continue
+        past_names.append(name)
+
         try:
             email, position = getInfoFromSubpage("http" + info[0].find("a")["href"][5:])
         except:
@@ -146,6 +150,7 @@ proxies = []
 
 past_queries = []
 past_last_names = []
+past_names = []
 
 req = Request( "https://sslproxies.org/",
    data=None,
