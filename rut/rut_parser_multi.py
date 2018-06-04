@@ -94,7 +94,6 @@ def readPage(query):
         last_name = faculty[-1].td.text.strip().split(" ")[-1]
         if last_name not in past_last_names and query.lower() in last_name.lower():
             past_last_names.append(last_name)
-            if
             if len(query) + 1 < len(last_name):
                 new_query = last_name[0:len(query)+1]
             else:
