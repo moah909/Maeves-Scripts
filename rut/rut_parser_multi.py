@@ -163,6 +163,26 @@ for row in proxies_table.tbody.find_all('tr'):
       row.find_all('td')[1].string)
 
 for i in range(0,26):
+    proxies = []
+
+    past_queries = []
+    past_last_names = []
+
+    req = Request( "https://sslproxies.org/",
+       data=None,
+        headers={
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
+        }
+    )
+
+    page = urlopen(req)
+
+    proxysoup = BeautifulSoup(page,"html.parser")
+    proxies_table = proxysoup.find(id='proxylisttable')
+
+    for row in proxies_table.tbody.find_all('tr'):
+        proxies.append( "http://" + row.find_all('td')[0].string + ":" +
+          row.find_all('td')[1].string)
     try:
         with Pool() as pool:
             result = pool.map(readPage, queries[i*CHUNK_SIZE:(i+1)*CHUNK_SIZE])
