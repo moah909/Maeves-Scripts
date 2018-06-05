@@ -5,6 +5,7 @@ PhD_regex  = re.compile(",? Ph\.?D\.?")
 mailto_pat = re.compile("mailto")
 
 def cleanName(name, flip=False):
+    name = name.split("- ")[0]
     name = re.sub(PhD_regex,"",name)
     name = re.sub(" +"," ",name)
     if flip:
@@ -24,7 +25,7 @@ def cleanDepartment(dept):
     dept = re.sub(" +"," ",dept)
     return dept.strip()
 
-def getEmailFromSubpage(link):
-    suburl = re.sub("/people/[^/]*$",link['href'],directory_page)
+def getEmailFromSubpage(link,regex,base_url):
+    suburl = re.sub(regex,link['href'],base_url)
     subsoup = BeautifulSoup(urlopen(suburl),"html.parser")
     return subsoup.find(href=mailto_pat.text)
