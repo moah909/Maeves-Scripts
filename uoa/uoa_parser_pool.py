@@ -247,7 +247,7 @@ dept_attrs      = { "class_" : "degree"}
 output_file = "uoa.csv"
 
 for start_index in range(0,5):
-        directory_page.append("http://directory.arizona.edu/phonebook?"+urlencode(dict(("department[{}]".format(i),DEPARTMENTS[start_index*10+i]) for i in range(0,10))))
+        directory_page.append("https://www.info.iastate.edu/individuals/advanced?last_name=&first_name=&email=&individual_type=faculty_staff&"+urlencode(dict(("department[{}]".format(i),DEPARTMENTS[start_index*10+i]) for i in range(0,10))))
 
 with Pool() as pool:
     result = pool.map(readDept, directory_page)
