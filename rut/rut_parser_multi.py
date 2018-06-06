@@ -29,6 +29,7 @@ def getInfoFromSubpage(link):
             break
     else:
         raise Exception("Failed 5 times")
+
 def readPage(query):
     print("Query: {}".format(query))
     current_page = 0

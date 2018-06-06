@@ -4,7 +4,9 @@ import bs4
 PhD_regex  = re.compile(",? Ph\.?D\.?")
 mailto_pat = re.compile("mailto")
 
-def cleanName(name, flip=False):
+def cleanName(name, flip=False, delim = None, index=0):
+    if delim is not None:
+        name = name.split(delim)[index]
     name = name.split("- ")[0]
     name = re.sub(PhD_regex,"",name)
     name = re.sub(" +"," ",name)

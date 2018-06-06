@@ -44,7 +44,7 @@ position_attrs  = { "class_" : "staffMember"}
 dept_tag        = None # Can be None to not sort by tag
 dept_attrs      = { "class_" : "department"}
 
-output_file = "outputfile.csv"
+output_file = "dent.csv"
 
 
 # We can use command line input if it exists, otherwise prompt the user for input
