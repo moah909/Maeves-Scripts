@@ -37,7 +37,7 @@ def getInfoFromSubpage(link):
             name = cleanName(name, delim=",")
         except:
             proxies.pop(proxy_num)
-            print("{} failed to open {}/5, retrying...".format(query,attempt,))
+            print("{} failed to open {}/5, retrying...".format(attempt,))
             time.sleep(attempt)
             pass
         else:
