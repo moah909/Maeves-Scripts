@@ -29,7 +29,7 @@ def getInfoFromSubpage(link):
     soup = None
     for attempt in range(0,5):
         try:
-            proxy_num = randrange(100)
+            proxy_num = randrange(len(proxies))
             response = requests.get(link, proxies = {"http":proxies[proxy_num],"https":proxies[proxy_num]}, timeout=30)
             response.raise_for_status()
             soup = BeautifulSoup(response.text,"html.parser")
@@ -37,7 +37,7 @@ def getInfoFromSubpage(link):
             name = cleanName(name, delim=",")
         except:
             proxies.pop(proxy_num)
-            print("{} failed to open {}/5, retrying...".format(attempt,))
+            print("{} failed to open {}/5, retrying...".format(link,attempt,))
             time.sleep(attempt)
             pass
         else:
@@ -65,7 +65,7 @@ def readPage(query):
 
     for attempt in range(0,5):
         try:
-            proxy_num = randrange(100)
+            proxy_num = randrange(len(proxies))
             response = requests.get(directory_page, proxies = {"http":proxies[proxy_num],"https":proxies[proxy_num]})
             response.raise_for_status()
             soup  = BeautifulSoup(response.content,"html.parser")
