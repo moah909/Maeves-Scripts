@@ -13,7 +13,7 @@ import csv
 import itertools
 
 import logging
-logging.basicConfig(filename='missed_pages.log',level=logging.DEBUG)
+logging.basicConfig(filename='missed_pages.log',level=logging.WARNING)
 
 class NoPositionException(Exception):
     pass
@@ -69,7 +69,7 @@ def getInfoFromSubpage(link):
             break
     else:
         print("Missed 5 times, logging")
-        logging.info(link)
+        logging.warning(link)
         raise NoPositionException("Failed 5 times")
 
     try:
@@ -110,7 +110,7 @@ def readPage(query):
             break
     else:
         print("Missed 5 times, logging")
-        logging.info(directory_page)
+        logging.warning(directory_page)
 
     faculty = soup(class_="result")
 
