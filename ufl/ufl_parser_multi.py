@@ -97,6 +97,14 @@ def readPage(query):
         except NoPositionException:
             print("No position found for {}, skipping".format(name))
             continue
+        except NoDepartmentException():
+            print("No department found for {}, skipping".format(name))
+            continue
+        except Exception as err:
+            print("Unspecified exception occured for {}".format(name))
+            print(err)
+            continue
+
 
         print("\r{}/{}".format(idx,len(faculty)), flush=True, end="")
         past_queries.append(query)
