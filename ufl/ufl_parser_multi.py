@@ -12,11 +12,32 @@ from bs4 import BeautifulSoup
 import csv
 import itertools
 
+import logging
+logging.basicConfig(filename='missed_pages.log',level=logging.DEBUG)
+
 class NoPositionException(Exception):
     pass
 
 class NoDepartmentException(Exception):
     pass
+
+def generateProxies():
+    global proxies
+    req = Request( "https://sslproxies.org/",
+       data=None,
+        headers={
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
+        }
+    )
+
+    page = urlopen(req)
+
+    proxysoup = BeautifulSoup(page,"html.parser")
+    proxies_table = proxysoup.find(id='proxylisttable')
+
+    for row in proxies_table.tbody.find_all('tr'):
+        proxies.append( "http://" + row.find_all('td')[0].string + ":" +
+          row.find_all('td')[1].string)
 
 def processEmail(person):
     ALPHA = '+-.0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz'
@@ -27,22 +48,28 @@ def processEmail(person):
 
 def getInfoFromSubpage(link):
     soup = None
+    proxy_num = randrange(len(proxies))
     for attempt in range(0,5):
         try:
-            proxy_num = randrange(len(proxies))
+            if(len(proxies)<2):
+                generateProxies()
+            if(attempt == 3):
+                proxies.pop(proxy_num)
+                proxy_num = randrange(len(proxies))
             response = requests.get(link, proxies = {"http":proxies[proxy_num],"https":proxies[proxy_num]}, timeout=30)
             response.raise_for_status()
             soup = BeautifulSoup(response.text,"html.parser")
             name = soup.find(id="indv-name-title").text
             name = cleanName(name, delim=",")
         except:
-            proxies.pop(proxy_num)
             print("{} failed to open {}/5, retrying...".format(link,attempt,))
             time.sleep(attempt)
             pass
         else:
             break
     else:
+        print("Missed 5 times, logging")
+        logging.info(link)
         raise NoPositionException("Failed 5 times")
 
     try:
@@ -63,21 +90,27 @@ def readPage(query):
     retval = []
     directory_page = "https://directory.ufl.edu/search/?f=&l={}&e=&spa=&a=staff".format(query)
 
+
+    proxy_num = randrange(len(proxies))
     for attempt in range(0,5):
         try:
-            proxy_num = randrange(len(proxies))
+            if(len(proxies)<2):
+                generateProxies()
+            if(attempt == 3):
+                proxies.pop(proxy_num)
+                proxy_num = randrange(len(proxies))
             response = requests.get(directory_page, proxies = {"http":proxies[proxy_num],"https":proxies[proxy_num]})
             response.raise_for_status()
             soup  = BeautifulSoup(response.content,"html.parser")
         except:
-            proxies.pop(proxy_num)
             print("{} failed to open {}/5, retrying...".format(query,attempt))
             time.sleep(attempt)
             pass
         else:
             break
     else:
-        raise Exception("Failed 5 times")
+        print("Missed 5 times, logging")
+        logging.info(directory_page)
 
     faculty = soup(class_="result")
 
@@ -192,21 +225,7 @@ for i in range(0,26):
     past_queries = []
     past_last_names = []
 
-    req = Request( "https://sslproxies.org/",
-       data=None,
-        headers={
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
-        }
-    )
-
-    page = urlopen(req)
-
-    proxysoup = BeautifulSoup(page,"html.parser")
-    proxies_table = proxysoup.find(id='proxylisttable')
-
-    for row in proxies_table.tbody.find_all('tr'):
-        proxies.append( "http://" + row.find_all('td')[0].string + ":" +
-          row.find_all('td')[1].string)
+    generateProxies()
 
     try:
         with Pool() as pool:
