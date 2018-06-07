@@ -111,6 +111,7 @@ def readPage(query):
     else:
         print("Missed 5 times, logging")
         logging.warning(directory_page)
+        return retval
 
     faculty = soup(class_="result")
 
