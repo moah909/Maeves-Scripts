@@ -64,7 +64,6 @@ def getInfoFromSubpage(link):
         except:
             print("{} failed to open {}/5, retrying...".format(link,attempt,))
             time.sleep(attempt)
-            pass
         else:
             break
     else:
@@ -105,7 +104,6 @@ def readPage(query):
         except:
             print("{} failed to open {}/5, retrying...".format(query,attempt))
             time.sleep(attempt)
-            pass
         else:
             break
     else:
