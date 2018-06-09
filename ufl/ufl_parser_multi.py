@@ -80,7 +80,7 @@ def getInfoFromSubpage(link):
     try:
         dept = soup.find(text="Department:").next.next.text.strip().title()
     except:
-        raise NoDepartmentException(name)
+        raise NoDepartmentException()
 
     return (name,position,dept)
 
