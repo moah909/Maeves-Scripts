@@ -84,10 +84,10 @@ def getInfoFromSubpage(link):
 
     return (name,position,dept)
 
-def readPage(query):
-    print("Query: {}".format(query))
+def readPage(query,first=""):
+    print("\rQuery: {}{}".format(query,", {}".format(first) if first != "" else ""))
     retval = []
-    directory_page = "https://directory.ufl.edu/search/?f=&l={}&e=&spa=&a=staff".format(query)
+    directory_page = "https://directory.ufl.edu/search/?f={}&l={}&e=&spa=&a=staff".format(first,query)
 
 
     proxy_num = randrange(len(proxies))
@@ -102,7 +102,7 @@ def readPage(query):
             response.raise_for_status()
             soup  = BeautifulSoup(response.content,"html.parser")
         except:
-            print("{} failed to open {}/5, retrying...".format(query,attempt))
+            print("\r{} failed to open {}/5, retrying...".format(query,attempt), flush=True)
             time.sleep(attempt)
         else:
             break
@@ -113,53 +113,53 @@ def readPage(query):
 
     faculty = soup(class_="result")
 
-    for idx, person in enumerate(faculty):
-
-        name = person.find(class_="full-name").text
-
-        try:
-            email = processEmail(person)
-        except:
-            print("\rEmail not found for {}, skipping...".format(name))
-            continue
-
-        try:
-            link = re.sub("/search/[^/]*$",person.a['href'][2:],directory_page)
-            name, position, dept = getInfoFromSubpage(link)
-        except NoPositionException:
-            print("No position found for {}, skipping".format(name))
-            continue
-        except NoDepartmentException():
-            print("No department found for {}, skipping".format(name))
-            continue
-        except Exception as err:
-            print("Unspecified exception occured for {}".format(name))
-            print(err)
-            continue
-
-
-        print("\r{}/{}".format(idx,len(faculty)), flush=True, end="")
-        past_queries.append(query)
-        retval.append([name,email,position,dept])
-
-
     if soup.find(text=re.compile("first 100")) != None:
-        last_name = faculty[-1].h4.text.strip().split(",")[0]
-        if len(query) + 1 < len(last_name):
-            new_query = last_name[0:len(query)+1]
-        else:
-            new_query = last_name
-        while True:
+        for letter in ALPHABET:
+            retval.extend(readPage(query,first=(first+letter)))
+    else:
 
-            if new_query not in past_queries:
-                readPage(new_query)
+        for idx, person in enumerate(faculty):
 
-            if new_query[-1] not in ALPHABET[:-1]:
-                break
-            new_query = new_query[:-1] + ALPHABET[ord(new_query[-1])-ord("a")+1]
+            name = person.find(class_="full-name").text
+
+            try:
+                email = processEmail(person)
+            except:
+                print("\rEmail not found for {}, skipping...".format(name))
+                continue
+
+            try:
+                link = re.sub("/search/[^/]*$",person.a['href'][2:],directory_page)
+                name, position, dept = getInfoFromSubpage(link)
+            except NoPositionException:
+                print("No position found for {}, skipping".format(name))
+                continue
+            except NoDepartmentException():
+                print("No department found for {}, skipping".format(name))
+                continue
+            except Exception as err:
+                print("Unspecified exception occured for {}".format(name))
+                print(err)
+                continue
 
 
-    print("\r{}/{} {}".format(len(faculty),len(faculty),query), flush=True)
+            print("\r{}/{}".format(idx,len(faculty)), flush=True, end="")
+            past_queries.append(query)
+            retval.append([name,email,position,dept])
+        # last_name = faculty[-1].h4.text.strip().split(",")[0]
+        # if len(query) + 1 < len(last_name):
+        #     new_query = last_name[0:len(query)+1]
+        # else:
+        #     new_query = last_name
+        # while True:
+        #
+        #     if new_query not in past_queries:
+        #         readPage(new_query)
+        #
+        #     if new_query[-1] not in ALPHABET[:-1]:
+        #         break
+        #     new_query = new_query[:-1] + ALPHABET[ord(new_query[-1])-ord("a")+1]
+
 
     return retval
 
@@ -217,6 +217,8 @@ proxies_table = proxysoup.find(id='proxylisttable')
 for row in proxies_table.tbody.find_all('tr'):
     proxies.append( "http://" + row.find_all('td')[0].string + ":" +
       row.find_all('td')[1].string)
+
+exit()
 
 for i in range(0,26):
     proxies = []
