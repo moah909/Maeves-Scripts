@@ -218,8 +218,6 @@ for row in proxies_table.tbody.find_all('tr'):
     proxies.append( "http://" + row.find_all('td')[0].string + ":" +
       row.find_all('td')[1].string)
 
-exit()
-
 for i in range(0,26):
     proxies = []
 
