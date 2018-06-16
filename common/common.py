@@ -1,7 +1,8 @@
 import re
-import bs4
+from bs4 import BeautifulSoup
+import requests
 
-PhD_regex  = re.compile(",? Ph\.?D\.?")
+PhD_regex  = re.compile("(,? Ph\.?D\.?)|(,? M\.?D\.?)")
 mailto_pat = re.compile("mailto")
 
 def cleanName(name, flip=False, delim = None, index=0):
@@ -31,3 +32,20 @@ def getEmailFromSubpage(link,regex,base_url):
     suburl = re.sub(regex,link['href'],base_url)
     subsoup = BeautifulSoup(urlopen(suburl),"html.parser")
     return subsoup.find(href=mailto_pat.text)
+
+def getPositionFromSubpage(link,regex,base_url,args,kwargs):
+    suburl = re.sub(regex,link['href'],base_url)
+    subsoup = BeautifulSoup(urlopen(suburl),"html.parser")
+    return subsoup.find(*args,**kwargs)
+
+def writeToCSV(filename,array):
+    with open(filename, 'a+', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        for row in array:
+            writer.writerow(row)
+
+def getSoup(url):
+    return BeautifulSoup(requests.get(url).content,"html.parser")
+
+def getStrings(chunk):
+    return [string for string in chunk.stripped_strings]
