@@ -1,3 +1,4 @@
 ms/
 *.csv*
 __pycache__/
+*.xlsx
